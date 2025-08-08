@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import DayCard from './daycard';
 
 
-function getFetchNow() { 
+function getWorkoutData() { 
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -10,7 +10,7 @@ function getFetchNow() {
     useEffect(() => {
         const fetchWorkOutData = async () => {
             try {
-                const response = await fetch("http://100.91.90.9:3000/fuck");
+                const response = await fetch("http://100.91.90.9:3000/api/workouts");
                 if (!response.ok) {
                     throw new Error(`HTTP error: Status ${response.status}`);
                 }
@@ -29,8 +29,8 @@ function getFetchNow() {
     return [loading,error,data]
 };
 
-function WorkoutLog() {
-    const arrayofthings = getFetchNow()
+function WorkoutList() {
+    const arrayofthings = getWorkoutData()
     const loading = arrayofthings[0]
     const error = arrayofthings[1]
     const data:any = arrayofthings[2]
@@ -40,14 +40,15 @@ function WorkoutLog() {
 
     return (
         <>
-        {
-            Object.entries(data).map(([day,values]) => {
-                return <DayCard key={day} day={day} workoutObj={values} />
-            })
-        }
-        {/*<DayCard day={"Monday"} workoutObj={datajson} />*/}
+        <div className='flex flex-col'>
+            {
+                Object.entries(data).map(([day,values]) => {
+                    return <DayCard key={day} day={day} workoutObj={values} />
+                })
+            }
+        </div>
     </>
   )
 }
 
-export default WorkoutLog;
+export default WorkoutList;
